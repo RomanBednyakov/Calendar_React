@@ -1,0 +1,18 @@
+$color: #000000;
+$h2color: #740e0e;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'SF Pro Display', sans-serif;
+}
+html, body, #root {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+@import "../../assets/scss/styles/app-rtl";
+@import "../../assets/scss/./styles/app";
+@import "../../assets/scss/./styles/bootstrap";
