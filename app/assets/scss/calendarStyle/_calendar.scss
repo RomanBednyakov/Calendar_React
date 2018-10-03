@@ -1,4 +1,47 @@
 /* Calendar Module Style */
+$app-primary: #3f51b5 !default;
+// Flex
+@mixin display-flex($flex: flex, $flex-direction: row, $flex-wrap: nowrap) {
+  display: #{'-webkit'}-#{$flex};
+  display: #{'-moz'}-#{$flex};
+  display: #{'-ms'}-#{$flex}box;
+  display: #{'-o'}-#{$flex};
+  display: $flex;
+  -webkit-flex-direction: $flex-direction;
+  -ms-flex-direction: $flex-direction;
+  flex-direction: $flex-direction;
+  -webkit-flex-wrap: $flex-wrap;
+  -ms-flex-wrap: $flex-wrap;
+  flex-wrap: $flex-wrap;
+}
+@mixin align-items($align-items) {
+  -webkit-align-items: $align-items;
+  align-items: $align-items;
+}
+@mixin flex($flex-grow: 1, $flex-shrink: 1, $flex-basis: auto) {
+  -webkit-flex: $flex-grow $flex-shrink $flex-basis;
+  -ms-flex: $flex-grow $flex-shrink $flex-basis;
+  flex: $flex-grow $flex-shrink $flex-basis;
+}
+// stylelint-disable
+$white:    #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$black:    #000 !default;
+$app-primary: #3f51b5 !default;
+// Box Shadow
+@mixin box-shadow($shadow...) {
+  -moz-box-shadow: $shadow;
+  -webkit-box-shadow: $shadow;
+  box-shadow: $shadow;
+}
 
 .rbc-calendar {
   .app-calendar & {

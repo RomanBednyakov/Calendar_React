@@ -4,7 +4,7 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import ReactModal from 'react-modal';
 import PropTypes from 'prop-types';
-import { getMonthCalendar } from '../../redux/action/calendar';
+import getMonthCalendar from '../../redux/action/calendar';
 import './app.scss';
 import Calendar from '../Calendar';
 import ModalEventDetail from '../ModalEventDetail';
@@ -106,7 +106,6 @@ App.propTypes = {
   getMonthCalendar: PropTypes.func.isRequired,
   calendar: PropTypes.shape({
     eventForMonth: PropTypes.array.isRequired,
-    eventForDay: PropTypes.array.isRequired,
   }).isRequired,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);

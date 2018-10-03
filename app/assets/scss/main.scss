@@ -1,3 +1,4 @@
+@import "../../assets/scss/calendarStyle/calendar";
 $color: #000000;
 $h2color: #740e0e;
 *,
@@ -13,6 +14,11 @@ html, body, #root {
   padding: 0;
   margin: 0;
 }
-@import "../../assets/scss/styles/app-rtl";
-@import "../../assets/scss/./styles/app";
-@import "../../assets/scss/./styles/bootstrap";
+body {
+  font-family: Nunito Sans,sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #5c5c5c;
+  background-color: #f4f4f4;
+  overflow: hidden;
+}

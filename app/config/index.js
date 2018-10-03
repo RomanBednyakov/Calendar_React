@@ -1,3 +1,3 @@
-const token = localStorage.getItem('token');
-const hrefUrl = 'http://localhost:3000';
+const token = '5qUulvNbLKX3ezxNdqdHWA';
+const hrefUrl = 'https://api.sportsanalyticsinc.com/events/external';
 export default { token, hrefUrl };
