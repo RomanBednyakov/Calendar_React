@@ -4,7 +4,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.scss';
 
 const allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k]);
-const Basic = ({
+const Calendar = ({
   localizer, events, onNavigate, onSelectEvent,
 }) => (
   <div className="app-calendar animated slideInUpTiny animation-duration-3">
@@ -20,5 +20,4 @@ const Basic = ({
     />
   </div>
 );
-
-export default Basic;
+export default Calendar;
