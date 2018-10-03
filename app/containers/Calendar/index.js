@@ -1,12 +1,11 @@
 import React from 'react';
 import BigCalendar from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-// import events from './events';
-import './basic.scss';
+import './calendar.scss';
 
 const allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k]);
 const Basic = ({
-  localizer, events, onView, onNavigate,
+  localizer, events, onNavigate, onSelectEvent,
 }) => (
   <div className="app-calendar animated slideInUpTiny animation-duration-3">
     <BigCalendar
@@ -14,10 +13,10 @@ const Basic = ({
       step={60}
       views={allViews}
       showMultiDayTimes
-      defaultDate={new Date(2018, 0, 20)}
+      defaultDate={new Date(2018, 0)}
       localizer={localizer}
-      onView={onView}
       onNavigate={onNavigate}
+      onSelectEvent={onSelectEvent}
     />
   </div>
 );

@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
-import { getMonthCalendar, getDateCalendar } from '../../redux/action/calendar';
+import { getMonthCalendar } from '../../redux/action/calendar';
 import './app.scss';
-import Basic from './supCalendar/basic';
+import Calendar from '../Calendar';
 
 const localizer = BigCalendar.momentLocalizer(moment);
 
@@ -12,73 +12,74 @@ const mapStateToProps = ({ calendar }) => ({
   calendar,
 });
 const mapDispatchToProps = dispatch => ({
-  getMonthCalendar: () => dispatch(getMonthCalendar()),
-  getDateCalendar: () => dispatch(getDateCalendar()),
+  getMonthCalendar: (year, month) => dispatch(getMonthCalendar(year, month)),
 });
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // eventMonth: [],
-      // eventDay: [],
+      yearEvents: 2018,
+      monthEvents: 0,
     };
-    this.filterEnvet = [];
+    this.filterEvents = [];
+    this.searchEventInfo = {};
   }
 
   componentDidMount() {
-    this.props.getMonthCalendar();
+    this.props.getMonthCalendar(this.state.yearEvents, this.state.monthEvents);
   }
-  getOnView = (e) => {
-    console.log('getOnView', e);
+
+  onSelectEvents = (a) => {
+    console.log('@', this.searchEventInfo[a.id]);
   };
+
   getOnNavigate = (date) => {
-    console.log('getOnNavigate', date.getFullYear());
-    console.log('getOnNavigate', date.getMonth());
+    const nextYear = date.getFullYear();
+    const nextMonth = date.getMonth();
+    if (this.state.yearEvents === nextYear) {
+      if (this.state.monthEvents !== nextMonth) {
+        this.props.getMonthCalendar(this.state.yearEvents, nextMonth);
+        this.setState({ monthEvents: nextMonth });
+      }
+    } else {
+      console.log('@', 111);
+      this.props.getMonthCalendar(nextYear, nextMonth);
+      this.setState({ yearEvents: nextYear, monthEvents: nextMonth });
+    }
   };
 
-  changeMonthState = (event) => {
-    // console.log('@', 111);
-    // const event2 = {
-    //   id: 1,
-    //   title: 'Long Event',
-    //   start: new Date(2018, 0, 4),
-    //   end: new Date(2018, 0, 6),
-    // };
-    // this.filterEnvet = events;
-    // console.log('@', event);
-    const arr = [];
+
+  filterMonthEvents = (events) => {
+    const convertEvents = [];
+    const hashMapEvents = {};
     const regExp = /\(([^)]+)\)/;
-    event.forEach((item) => {
-      const matches = regExp.exec(item.endDate);
-      const matchesStart = regExp.exec(item.startDate);
-      const newEvent = {};
-      newEvent.title = item.eventName;
-      newEvent.start = new Date(Number(matchesStart[1]));
-      newEvent.end = new Date(Number(matches[1]));
-      arr.push(newEvent);
-    });
-    this.filterEnvet = arr;
-  };
+    events.forEach((item) => {
+      const convertEvent = {
+        title: item.eventName,
+        id: item.eventId,
+        start: new Date(Number(regExp.exec(item.startDate)[1])),
+        end: new Date(Number(regExp.exec(item.endDate)[1])),
+      };
+      convertEvents.push(convertEvent);
 
-  toogleStateReduxDate = () => {
-    this.props.getDateCalendar();
+      hashMapEvents[item.eventId] = item;
+    });
+    this.searchEventInfo = hashMapEvents;
+    this.filterEvents = convertEvents;
   };
 
   render() {
-    if (this.props.calendar.getEventMonthCalendar.length > 0) {
-      this.changeMonthState(this.props.calendar.getEventMonthCalendar);
-    }
-    if (this.props.calendar.getEventDateCalendar.length > 0) {
-      this.changeMonthState(this.props.calendar.getEventDateCalendar);
+    if (this.props.calendar.eventForMonth.length > 0) {
+      this.filterMonthEvents(this.props.calendar.eventForMonth);
     }
     return (
       <div className="app-wrapper">
-        <Basic
-          events={this.filterEnvet}
+        <Calendar
+          events={this.filterEvents}
           onNavigate={this.getOnNavigate}
-          onView={this.getOnView}
           localizer={localizer}
+          onSelectEvent={this.onSelectEvents}
         />
       </div>
     );
