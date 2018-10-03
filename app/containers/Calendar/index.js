@@ -12,7 +12,6 @@ const Calendar = ({
       events={events}
       step={60}
       views={allViews}
-      showMultiDayTimes
       defaultDate={new Date(2018, 0)}
       localizer={localizer}
       onNavigate={onNavigate}
