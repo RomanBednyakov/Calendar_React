@@ -1,4 +1,4 @@
-## react-redux-boilerplate-2018
+## React Big Calendar
 Simple and optimized React boilerplate. It includes:
 
 - [x] React 16.4.0
