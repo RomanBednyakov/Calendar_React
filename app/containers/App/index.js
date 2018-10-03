@@ -2,9 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
+import ReactModal from 'react-modal';
+import PropTypes from 'prop-types';
 import { getMonthCalendar } from '../../redux/action/calendar';
 import './app.scss';
 import Calendar from '../Calendar';
+import ModalEventDetail from '../ModalEventDetail';
 
 const localizer = BigCalendar.momentLocalizer(moment);
 
@@ -21,9 +24,11 @@ class App extends React.Component {
     this.state = {
       yearEvents: 2018,
       monthEvents: 0,
+      isOpen: false,
+      idEvent: 0,
     };
     this.filterEvents = [];
-    this.searchEventInfo = {};
+    this.searchEventDetail = {};
   }
 
   componentDidMount() {
@@ -31,7 +36,7 @@ class App extends React.Component {
   }
 
   onSelectEvents = (a) => {
-    console.log('@', this.searchEventInfo[a.id]);
+    this.setState({ isOpen: !this.state.isOpen, idEvent: a.id });
   };
 
   getOnNavigate = (date) => {
@@ -43,7 +48,6 @@ class App extends React.Component {
         this.setState({ monthEvents: nextMonth });
       }
     } else {
-      console.log('@', 111);
       this.props.getMonthCalendar(nextYear, nextMonth);
       this.setState({ yearEvents: nextYear, monthEvents: nextMonth });
     }
@@ -58,6 +62,7 @@ class App extends React.Component {
       const convertEvent = {
         title: item.eventName,
         id: item.eventId,
+        desc: item.description,
         start: new Date(Number(regExp.exec(item.startDate)[1])),
         end: new Date(Number(regExp.exec(item.endDate)[1])),
       };
@@ -65,8 +70,11 @@ class App extends React.Component {
 
       hashMapEvents[item.eventId] = item;
     });
-    this.searchEventInfo = hashMapEvents;
+    this.searchEventDetail = hashMapEvents;
     this.filterEvents = convertEvents;
+  };
+  isOpenModal = () => {
+    this.setState({ isOpen: !this.state.isOpen });
   };
 
   render() {
@@ -81,8 +89,24 @@ class App extends React.Component {
           localizer={localizer}
           onSelectEvent={this.onSelectEvents}
         />
+        <ReactModal
+          ariaHideApp={false}
+          isOpen={this.state.isOpen}
+          className="Modal"
+          shouldCloseOnOverlayClick
+          onRequestClose={this.isOpenModal}
+        >
+          <ModalEventDetail eventDetail={this.searchEventDetail[this.state.idEvent]} />
+        </ReactModal>
       </div>
     );
   }
 }
+App.propTypes = {
+  getMonthCalendar: PropTypes.func.isRequired,
+  calendar: PropTypes.shape({
+    eventForMonth: PropTypes.array.isRequired,
+    eventForDay: PropTypes.array.isRequired,
+  }).isRequired,
+};
 export default connect(mapStateToProps, mapDispatchToProps)(App);
