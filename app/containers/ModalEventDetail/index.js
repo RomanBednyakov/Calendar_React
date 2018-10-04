@@ -19,7 +19,7 @@ const ModalEventDetail = (props) => {
         {email && (<span className="modalEventDetail__details"><span className="modalEventDetail__modify">Email</span> <span className="modalEventDetail__modify_phone">{email}</span></span>
         )}
         <div className="modalEventDetail__Address">
-          <span className="modalEventDetail__modify">Event Place Address</span>
+          <span className="modalEventDetail__modify">Event Place and Address</span>
           <div>
             {venueStreet1 && (<span className="modalEventDetail__place">{venueStreet1}</span>
             )}
