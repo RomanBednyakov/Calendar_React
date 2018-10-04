@@ -3,18 +3,37 @@ import './ModalEventDetail.scss';
 
 const ModalEventDetail = (props) => {
   const {
-    eventName, coordinator, email, venue, phone, venueCity, venueState, venueStreet1,
+    eventName, eventColor,
+    coordinator, email, venue, phone, venueCity, venueState, venueStreet1, description, website,
   } = props.eventDetail;
   return (
     <div className="modalEventDetail">
-      <span className="modalEventDetail__title">{eventName}</span>
-      <span className="modalEventDetail__details"><span className="modalEventDetail__modify">Coordinator:</span> {coordinator}</span>
-      <span className="modalEventDetail__details"><span className="modalEventDetail__modify">Email:</span> {email}</span>
-      <span className="modalEventDetail__details"><span className="modalEventDetail__modify">Phone:</span> {phone}</span>
-      <span className="modalEventDetail__details"><span className="modalEventDetail__modify">Venue:</span> {venue}</span>
-      <span className="modalEventDetail__details"><span className="modalEventDetail__modify">Venue City:</span> {venueCity}</span>
-      <span className="modalEventDetail__details"><span className="modalEventDetail__modify">Venue State:</span> {venueState}</span>
-      <span className="modalEventDetail__details"><span className="modalEventDetail__modify">Venue Street:</span> {venueStreet1}</span>
+      <span className="modalEventDetail__title" style={{ backgroundColor: `#${eventColor}` }}>{eventName}</span>
+      <div className="modalEventDetail__content">
+        {description && (<span className="modalEventDetail__details"><span className="modalEventDetail__modify">Description</span> {description}</span>
+        )}
+        {coordinator && (<span className="modalEventDetail__details"><span className="modalEventDetail__modify">Event Coordinator</span> {coordinator}</span>
+        )}
+        {phone && (<span className="modalEventDetail__details"><span className="modalEventDetail__modify">Phone</span> <span className="modalEventDetail__modify_phone">{phone}</span></span>
+        )}
+        {email && (<span className="modalEventDetail__details"><span className="modalEventDetail__modify">Email</span> <span className="modalEventDetail__modify_phone">{email}</span></span>
+        )}
+        <div className="modalEventDetail__Address">
+          <span className="modalEventDetail__modify">Event Place Address</span>
+          <div>
+            {venueStreet1 && (<span className="modalEventDetail__place">{venueStreet1}</span>
+            )}
+            {venue && (<span className="modalEventDetail__place">{venue}</span>
+            )}
+            {venueCity && (<span className="modalEventDetail__place">{venueCity}</span>
+            )}
+            {venueState && (<span className="modalEventDetail__place">{venueState}</span>
+            )}
+          </div>
+        </div>
+        {website && (<span className="modalEventDetail__details"><span className="modalEventDetail__modify">Web Site</span> {website}</span>
+        )}
+      </div>
     </div>
   );
 };

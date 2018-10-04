@@ -53,7 +53,6 @@ class App extends React.Component {
     }
   };
 
-
   filterMonthEvents = (events) => {
     const convertEvents = [];
     const hashMapEvents = {};
