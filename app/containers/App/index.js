@@ -1,31 +1,35 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import BigCalendar from 'react-big-calendar';
-import moment from 'moment';
-import ReactModal from 'react-modal';
-import PropTypes from 'prop-types';
-import getMonthCalendar from '../../redux/action/calendar';
-import './app.scss';
-import Calendar from '../Calendar';
-import ModalEventDetail from '../ModalEventDetail';
+import React from "react";
+import { connect } from "react-redux";
+import BigCalendar from "react-big-calendar";
+import moment from "moment";
+import ReactModal from "react-modal";
+import PropTypes from "prop-types";
+import getMonthCalendar from "../../redux/action/calendar";
+import "./app.scss";
+import Calendar from "../Calendar";
+import ModalEventDetail from "../ModalEventDetail";
+import ModalSettings from "../ModalSettings";
+import iconSettings from "../../assets/images/settings.png";
 
 const localizer = BigCalendar.momentLocalizer(moment);
 
 const mapStateToProps = ({ calendar }) => ({
-  calendar,
+  calendar
 });
 const mapDispatchToProps = dispatch => ({
-  getMonthCalendar: (year, month) => dispatch(getMonthCalendar(year, month)),
+  getMonthCalendar: (year, month) => dispatch(getMonthCalendar(year, month))
 });
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      yearEvents: 2018,
-      monthEvents: 0,
+      yearEvents: new Date().getFullYear(),
+      monthEvents: new Date().getMonth(),
       isOpen: false,
       idEvent: 0,
+      skins: "indigo",
+      isOpenSettings: false
     };
     this.filterEvents = [];
     this.searchEventDetail = {};
@@ -35,11 +39,11 @@ class App extends React.Component {
     this.props.getMonthCalendar(this.state.yearEvents, this.state.monthEvents);
   }
 
-  onSelectEvents = (a) => {
+  onSelectEvents = a => {
     this.setState({ isOpen: !this.state.isOpen, idEvent: a.id });
   };
 
-  getOnNavigate = (date) => {
+  getOnNavigate = date => {
     const nextYear = date.getFullYear();
     const nextMonth = date.getMonth();
     if (this.state.yearEvents === nextYear) {
@@ -53,17 +57,18 @@ class App extends React.Component {
     }
   };
 
-  filterMonthEvents = (events) => {
+  filterMonthEvents = events => {
     const convertEvents = [];
     const hashMapEvents = {};
     const regExp = /\(([^)]+)\)/;
-    events.forEach((item) => {
+    events.forEach(item => {
       const convertEvent = {
         title: item.eventName,
         id: item.eventId,
         desc: item.description,
         start: new Date(Number(regExp.exec(item.startDate)[1])),
         end: new Date(Number(regExp.exec(item.endDate)[1])),
+        colorEvent: item.eventColor
       };
       convertEvents.push(convertEvent);
 
@@ -75,19 +80,49 @@ class App extends React.Component {
   isOpenModal = () => {
     this.setState({ isOpen: !this.state.isOpen });
   };
-
+  changeColor = color => {
+    this.setState({ skins: color });
+  };
+  isOpenSettings = () => {
+    this.setState({ isOpenSettings: !this.state.isOpenSettings });
+  };
   render() {
     if (this.props.calendar.eventForMonth.length > 0) {
       this.filterMonthEvents(this.props.calendar.eventForMonth);
     }
     return (
-      <div className="app-wrapper">
+      <div className={`app-wrapper app-wrapper_${this.state.skins}`}>
         <Calendar
           events={this.filterEvents}
           onNavigate={this.getOnNavigate}
           localizer={localizer}
           onSelectEvent={this.onSelectEvents}
         />
+        <span
+          className={`app-wrapper-settings ${
+            this.state.isOpenSettings ? "settings_active" : ""
+          }`}
+          onClick={this.isOpenSettings}
+        >
+          <img
+            className="app-wrapper-settings-img"
+            src={iconSettings}
+            alt="Settings"
+          />
+        </span>
+        <ReactModal
+          ariaHideApp={false}
+          closeTimeoutMS={500}
+          isOpen={this.state.isOpenSettings}
+          className="ModalSettings"
+          shouldCloseOnOverlayClick
+          onRequestClose={this.isOpenSettings}
+        >
+          <ModalSettings
+            skins={this.state.skins}
+            changeColor={this.changeColor}
+          />
+        </ReactModal>
         <ReactModal
           ariaHideApp={false}
           isOpen={this.state.isOpen}
@@ -95,7 +130,10 @@ class App extends React.Component {
           shouldCloseOnOverlayClick
           onRequestClose={this.isOpenModal}
         >
-          <ModalEventDetail eventDetail={this.searchEventDetail[this.state.idEvent]} />
+          <ModalEventDetail
+            eventDetail={this.searchEventDetail[this.state.idEvent]}
+            skinsColor={this.state.skins}
+          />
         </ReactModal>
       </div>
     );
@@ -104,7 +142,10 @@ class App extends React.Component {
 App.propTypes = {
   getMonthCalendar: PropTypes.func.isRequired,
   calendar: PropTypes.shape({
-    eventForMonth: PropTypes.array.isRequired,
-  }).isRequired,
+    eventForMonth: PropTypes.array.isRequired
+  }).isRequired
 };
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

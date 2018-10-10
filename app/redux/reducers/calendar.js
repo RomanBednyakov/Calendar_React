@@ -1,7 +1,7 @@
-import GET_MONTH_CALENDAR from '../../constants/ActionTypes';
+import GET_MONTH_CALENDAR from "../../constants/ActionTypes";
 
 const initial = {
-  eventForMonth: [],
+  eventForMonth: []
 };
 
 const calendar = (state = initial, action) => {
@@ -10,7 +10,7 @@ const calendar = (state = initial, action) => {
     case GET_MONTH_CALENDAR:
       return {
         ...state,
-        eventForMonth: data,
+        eventForMonth: data
       };
     default:
       return state;
