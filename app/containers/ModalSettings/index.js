@@ -22,7 +22,8 @@ export default class ModalSettings extends React.Component {
       "pink",
       "blue",
       "deep-purple",
-      "green"
+      "green",
+      "dark-theme"
     ];
     return (
       <div className="modalSettings">

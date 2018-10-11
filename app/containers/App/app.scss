@@ -1,3 +1,14 @@
+@keyframes openModal {
+  0%   {margin-right: -20%;}
+  100% {margin-right: 0;}
+}
+@keyframes closeModal {
+  0%   {margin-right: 0;}
+  100% {margin-right: -26%;}
+}
+@keyframes iconAnimate {
+  100%{transform: rotate(135deg);}
+}
 .ReactModal__Overlay--after-open {
   z-index: 1000;
   background-color: rgba(0, 0, 0, 0.4) !important;
@@ -16,17 +27,8 @@
 .app-wrapper {
   padding: 36px 40px 0;
   width: 100%;
-}
-@keyframes openModal {
-  0%   {margin-right: -20%;}
-  100% {margin-right: 0;}
-}
-@keyframes closeModal {
-  0%   {margin-right: 0;}
-  100% {margin-right: -26%;}
-}
-@keyframes zmdi-spin {
-  100%{transform: rotate(135deg);}
+  background-color: #f4f4f4;
+  height: 100%;
 }
 .ModalSettings {
   top: 50%;
@@ -60,7 +62,7 @@
   cursor: pointer;
   align-items: center;
   &-img {
-    animation: zmdi-spin 1.5s infinite linear;
+    animation: iconAnimate 1.5s infinite linear;
     height: 20px;
   }
 }
