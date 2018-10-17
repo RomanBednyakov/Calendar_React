@@ -30,6 +30,12 @@
   background-color: #f4f4f4;
   height: 100%;
 }
+.app-wrapper-select {
+  margin-bottom: 30px;
+  .my-select__menu {
+    z-index: 115222!important;
+  }
+}
 .ModalSettings {
   top: 50%;
   animation-name: openModal;

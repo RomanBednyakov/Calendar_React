@@ -4,7 +4,11 @@ import BigCalendar from "react-big-calendar";
 import moment from "moment";
 import ReactModal from "react-modal";
 import PropTypes from "prop-types";
-import getMonthCalendar from "../../redux/action/calendar";
+import Select from "react-select";
+import {
+  getMonthCalendar,
+  getFilterEventType
+} from "../../redux/action/calendar";
 import "./app.scss";
 import Calendar from "../Calendar";
 import ModalEventDetail from "../ModalEventDetail";
@@ -17,9 +21,9 @@ const mapStateToProps = ({ calendar }) => ({
   calendar
 });
 const mapDispatchToProps = dispatch => ({
-  getMonthCalendar: (year, month) => dispatch(getMonthCalendar(year, month))
+  getMonthCalendar: (year, month) => dispatch(getMonthCalendar(year, month)),
+  getFilterEventType: () => dispatch(getFilterEventType())
 });
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -29,7 +33,10 @@ class App extends React.Component {
       isOpen: false,
       idEvent: 0,
       skins: "indigo",
-      isOpenSettings: false
+      isOpenSettings: false,
+      selectedOption: { value: null, label: "No filter" },
+      eventsType: [],
+      optionsSelect: []
     };
     this.filterEvents = [];
     this.searchEventDetail = {};
@@ -37,6 +44,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.props.getMonthCalendar(this.state.yearEvents, this.state.monthEvents);
+    this.props.getFilterEventType();
   }
 
   onSelectEvents = a => {
@@ -68,10 +76,10 @@ class App extends React.Component {
         desc: item.description,
         start: new Date(Number(regExp.exec(item.startDate)[1])),
         end: new Date(Number(regExp.exec(item.endDate)[1])),
-        colorEvent: item.eventColor
+        colorEvent: item.eventColor,
+        eventTypeId: item.eventTypeId
       };
       convertEvents.push(convertEvent);
-
       hashMapEvents[item.eventId] = item;
     });
     this.searchEventDetail = hashMapEvents;
@@ -86,12 +94,46 @@ class App extends React.Component {
   isOpenSettings = () => {
     this.setState({ isOpenSettings: !this.state.isOpenSettings });
   };
+  handleChangeSelect = selectedOption => {
+    this.setState({ selectedOption });
+  };
+  selectOptions = () => {
+    if (this.state.eventsType !== this.props.calendar.eventFilterTypes) {
+      this.setState({ eventsType: this.props.calendar.eventFilterTypes });
+      const options = [{ value: null, label: "Reset filter" }];
+      this.props.calendar.eventFilterTypes.map(item => {
+        return options.push({
+          value: item.eventTypeId,
+          label: item.eventTypeName
+        });
+      });
+      this.setState({ optionsSelect: options });
+    }
+  };
+  filterTypes = () => {
+    const typesFilter = this.filterEvents.filter(
+      item => item.eventTypeId === this.state.selectedOption.value
+    );
+    this.filterEvents = typesFilter;
+  };
   render() {
     if (this.props.calendar.eventForMonth.length > 0) {
       this.filterMonthEvents(this.props.calendar.eventForMonth);
     }
+    if (this.state.selectedOption.value !== null) {
+      this.filterTypes();
+    }
     return (
       <div className={`app-wrapper app-wrapper_${this.state.skins}`}>
+        <div className="app-wrapper-select" onClick={this.selectOptions}>
+          {" "}
+          <Select
+            value={this.state.selectedOption}
+            onChange={this.handleChangeSelect}
+            options={this.state.optionsSelect}
+            classNamePrefix="my-select"
+          />
+        </div>
         <Calendar
           events={this.filterEvents}
           onNavigate={this.getOnNavigate}

@@ -1,7 +1,11 @@
-import GET_MONTH_CALENDAR from "../../constants/ActionTypes";
+import {
+  GET_MONTH_CALENDAR,
+  GET_FILTER_EVENTtYPE
+} from "../../constants/ActionTypes";
 
 const initial = {
-  eventForMonth: []
+  eventForMonth: [],
+  eventFilterTypes: []
 };
 
 const calendar = (state = initial, action) => {
@@ -11,6 +15,11 @@ const calendar = (state = initial, action) => {
       return {
         ...state,
         eventForMonth: data
+      };
+    case GET_FILTER_EVENTtYPE:
+      return {
+        ...state,
+        eventFilterTypes: data
       };
     default:
       return state;
